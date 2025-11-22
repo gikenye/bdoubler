@@ -1,24 +1,51 @@
 "use client";
 
+import { SessionMatchingComponent } from '../sessions';
+import { RewardsDisplayComponent } from '../rewards';
+
 /**
- * HomeTab component displays the main landing content for the mini app.
- * 
- * This is the default tab that users see when they first open the mini app.
- * It provides a simple welcome message and placeholder content that can be
- * customized for specific use cases.
- * 
+ * HomeTab component displays the focus session dashboard.
+ *
+ * This tab provides session matching and rewards display for focus sessions.
+ *
  * @example
  * ```tsx
  * <HomeTab />
  * ```
  */
 export function HomeTab() {
+  // Mock reward data - in a real app, this would come from hooks or API
+  const mockRewardData = {
+    stakeReturns: 15.50,
+    groupBonuses: 5.25,
+    totalEarnings: 20.75,
+    sessionHistory: [
+      {
+        id: '1',
+        outcome: 'success' as const,
+        reward: 10.00,
+        stakeReturn: 8.00,
+        groupBonus: 2.00,
+        date: new Date(),
+      },
+      {
+        id: '2',
+        outcome: 'partial' as const,
+        reward: 5.25,
+        stakeReturn: 4.00,
+        groupBonus: 1.25,
+        date: new Date(Date.now() - 86400000), // yesterday
+      },
+    ],
+  };
+
   return (
-    <div className="flex items-center justify-center h-[calc(100vh-200px)] px-6">
-      <div className="text-center w-full max-w-md mx-auto">
-        <p className="text-lg mb-2">Put your content here!</p>
-        <p className="text-sm text-gray-500 dark:text-gray-400">Powered by Neynar 🪐</p>
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Focus Session Dashboard</h1>
+      <div className="space-y-6">
+        <SessionMatchingComponent />
+        <RewardsDisplayComponent rewardData={mockRewardData} />
       </div>
     </div>
   );
-} 
+}

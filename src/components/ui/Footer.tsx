@@ -17,7 +17,7 @@ export const Footer: React.FC<FooterProps> = ({ activeTab, setActiveTab, showWal
         }`}
       >
         <span className="text-xl">🏠</span>
-        <span className="text-xs mt-1">Home</span>
+        <span className="text-xs mt-1">Sessions</span>
       </button>
       <button
         onClick={() => setActiveTab(Tab.Actions)}
@@ -26,7 +26,7 @@ export const Footer: React.FC<FooterProps> = ({ activeTab, setActiveTab, showWal
         }`}
       >
         <span className="text-xl">⚡</span>
-        <span className="text-xs mt-1">Actions</span>
+        <span className="text-xs mt-1">Stake</span>
       </button>
       <button
         onClick={() => setActiveTab(Tab.Context)}
@@ -35,7 +35,7 @@ export const Footer: React.FC<FooterProps> = ({ activeTab, setActiveTab, showWal
         }`}
       >
         <span className="text-xl">📋</span>
-        <span className="text-xs mt-1">Context</span>
+        <span className="text-xs mt-1">Rewards</span>
       </button>
       {showWallet && (
         <button

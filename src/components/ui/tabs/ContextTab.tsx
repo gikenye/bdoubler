@@ -1,35 +1,50 @@
 "use client";
 
-import { useMiniApp } from "@neynar/react";
+import { RewardsDisplayComponent } from "../rewards";
 
 /**
- * ContextTab component displays the current mini app context in JSON format.
- * 
- * This component provides a developer-friendly view of the Farcaster mini app context,
- * including user information, client details, and other contextual data. It's useful
- * for debugging and understanding what data is available to the mini app.
- * 
- * The context includes:
- * - User information (FID, username, display name, profile picture)
- * - Client information (safe area insets, platform details)
- * - Mini app configuration and state
- * 
+ * ContextTab component displays the user's rewards and session history.
+ *
+ * This component serves as the rewards view, showing:
+ * - Stake returns from completed sessions
+ * - Bonuses earned from group completions
+ * - Total earnings accumulated
+ * - Recent session history with outcomes
+ *
  * @example
  * ```tsx
  * <ContextTab />
  * ```
  */
 export function ContextTab() {
-  const { context } = useMiniApp();
-  
+  // Mock reward data - in a real app, this would come from hooks or API
+  const mockRewardData = {
+    stakeReturns: 12.0,
+    groupBonuses: 3.25,
+    totalEarnings: 15.25,
+    sessionHistory: [
+      {
+        id: "1",
+        outcome: "success" as const,
+        reward: 10.0,
+        stakeReturn: 8.0,
+        groupBonus: 2.0,
+        date: new Date("2024-01-15"),
+      },
+      {
+        id: "2",
+        outcome: "partial" as const,
+        reward: 5.25,
+        stakeReturn: 4.0,
+        groupBonus: 1.25,
+        date: new Date("2024-01-14"),
+      },
+    ],
+  };
+
   return (
     <div className="mx-6">
-      <h2 className="text-lg font-semibold mb-2">Context</h2>
-      <div className="p-4 bg-gray-100 dark:bg-gray-800 rounded-lg">
-        <pre className="font-mono text-xs whitespace-pre-wrap break-words w-full">
-          {JSON.stringify(context, null, 2)}
-        </pre>
-      </div>
+      <RewardsDisplayComponent rewardData={mockRewardData} />
     </div>
   );
-} 
+}

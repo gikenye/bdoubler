@@ -1,0 +1,1 @@
+export { StakingComponent } from './StakingComponent';
