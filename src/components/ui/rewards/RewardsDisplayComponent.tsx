@@ -63,54 +63,54 @@ export function RewardsDisplayComponent({ rewardData }: RewardsDisplayComponentP
   const totalProgress = (totalEarnings / maxEarnings) * 100;
 
   return (
-    <div className="space-y-6 p-6 border rounded-lg bg-white dark:bg-neutral-950">
-      <h3 className="text-xl font-semibold flex items-center gap-2">
-        <Trophy className="w-5 h-5 text-yellow-500" />
+    <div className="rpg-window space-y-6">
+      <h3 className="rpg-title text-xl font-semibold flex items-center gap-2">
+        <Trophy className="w-5 h-5 text-rpg-gold" />
         Your Rewards
       </h3>
 
       {/* Earnings Summary */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {/* Stake Returns */}
-        <div className="p-4 border rounded-lg">
+        <div className="rpg-window-inner p-4">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp className="w-4 h-4 text-green-500" />
-            <span className="text-sm font-medium">Stake Returns</span>
+            <TrendingUp className="w-4 h-4 text-rpg-green" />
+            <span className="rpg-label text-sm font-medium">Stake Returns</span>
           </div>
-          <div className="text-2xl font-bold text-green-600">{stakeReturns.toFixed(2)}</div>
-          <div className="mt-2 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+          <div className="rpg-title text-2xl font-bold">{stakeReturns.toFixed(2)}</div>
+          <div className="mt-2 bg-rpg-darker-brown rounded-full h-2 border border-rpg-brown">
             <div
-              className="bg-green-500 h-2 rounded-full transition-all duration-300"
+              className="bg-rpg-green h-2 rounded-full transition-all duration-300"
               style={{ width: `${Math.min(stakeProgress, 100)}%` }}
             />
           </div>
         </div>
 
         {/* Group Bonuses */}
-        <div className="p-4 border rounded-lg">
+        <div className="rpg-window-inner p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Users className="w-4 h-4 text-blue-500" />
-            <span className="text-sm font-medium">Group Bonuses</span>
+            <Users className="w-4 h-4 text-rpg-gold" />
+            <span className="rpg-label text-sm font-medium">Group Bonuses</span>
           </div>
-          <div className="text-2xl font-bold text-blue-600">{groupBonuses.toFixed(2)}</div>
-          <div className="mt-2 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+          <div className="rpg-title text-2xl font-bold">{groupBonuses.toFixed(2)}</div>
+          <div className="mt-2 bg-rpg-darker-brown rounded-full h-2 border border-rpg-brown">
             <div
-              className="bg-blue-500 h-2 rounded-full transition-all duration-300"
+              className="bg-rpg-gold h-2 rounded-full transition-all duration-300"
               style={{ width: `${Math.min(bonusProgress, 100)}%` }}
             />
           </div>
         </div>
 
         {/* Total Earnings */}
-        <div className="p-4 border rounded-lg">
+        <div className="rpg-window-inner p-4">
           <div className="flex items-center gap-2 mb-2">
-            <DollarSign className="w-4 h-4 text-purple-500" />
-            <span className="text-sm font-medium">Total Earnings</span>
+            <DollarSign className="w-4 h-4 text-rpg-gold" />
+            <span className="rpg-label text-sm font-medium">Total Earnings</span>
           </div>
-          <div className="text-2xl font-bold text-purple-600">{totalEarnings.toFixed(2)}</div>
-          <div className="mt-2 bg-neutral-200 dark:bg-neutral-700 rounded-full h-2">
+          <div className="rpg-title text-2xl font-bold">{totalEarnings.toFixed(2)}</div>
+          <div className="mt-2 bg-rpg-darker-brown rounded-full h-2 border border-rpg-brown">
             <div
-              className="bg-purple-500 h-2 rounded-full transition-all duration-300"
+              className="bg-rpg-gold h-2 rounded-full transition-all duration-300"
               style={{ width: `${Math.min(totalProgress, 100)}%` }}
             />
           </div>
@@ -119,32 +119,32 @@ export function RewardsDisplayComponent({ rewardData }: RewardsDisplayComponentP
 
       {/* Recent Session History */}
       <div>
-        <h4 className="text-lg font-medium mb-4">Recent Sessions</h4>
+        <h4 className="rpg-label text-lg font-medium mb-4">Recent Sessions</h4>
         <div className="space-y-3">
           {sessionHistory.slice(0, 5).map((session) => (
-            <div key={session.id} className="flex items-center justify-between p-3 border rounded-lg">
+            <div key={session.id} className="rpg-window-inner flex items-center justify-between p-3">
               <div className="flex items-center gap-3">
-                <div className={`w-3 h-3 rounded-full ${
-                  session.outcome === 'success' ? 'bg-green-500' :
-                  session.outcome === 'partial' ? 'bg-yellow-500' : 'bg-red-500'
+                <div className={`w-3 h-3 rounded-full border border-rpg-brown ${
+                  session.outcome === 'success' ? 'bg-rpg-green' :
+                  session.outcome === 'partial' ? 'bg-rpg-gold' : 'bg-red-600'
                 }`} />
                 <div>
-                  <div className="font-medium capitalize">{session.outcome} Session</div>
-                  <div className="text-sm text-neutral-500">
+                  <div className="rpg-text font-medium capitalize">{session.outcome} Session</div>
+                  <div className="rpg-text text-sm opacity-70">
                     {session.date.toLocaleDateString()}
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                <div className="font-medium">+{session.reward.toFixed(2)}</div>
-                <div className="text-sm text-neutral-500">
+                <div className="rpg-title font-medium">+{session.reward.toFixed(2)}</div>
+                <div className="rpg-text text-sm opacity-70">
                   Stake: {session.stakeReturn.toFixed(2)} | Bonus: {session.groupBonus.toFixed(2)}
                 </div>
               </div>
             </div>
           ))}
           {sessionHistory.length === 0 && (
-            <div className="text-center text-neutral-500 py-8">
+            <div className="rpg-text text-center opacity-70 py-8">
               No sessions completed yet. Start focusing to earn rewards!
             </div>
           )}

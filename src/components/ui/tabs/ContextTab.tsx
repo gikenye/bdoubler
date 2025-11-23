@@ -43,7 +43,7 @@ export function ContextTab() {
   };
 
   return (
-    <div className="mx-6">
+    <div className="p-4">
       <RewardsDisplayComponent rewardData={mockRewardData} />
     </div>
   );

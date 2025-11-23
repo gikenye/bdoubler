@@ -1,23 +1,11 @@
 /**
- * DESIGN SYSTEM - DO NOT EDIT UNLESS NECESSARY
+ * DESIGN SYSTEM - Retro RPG Theme
  * 
- * This file contains the centralized design system for the mini app.
- * These component classes establish the visual consistency across all components.
- * 
- * ⚠️  AI SHOULD NOT NORMALLY EDIT THIS FILE ⚠️
- * 
- * Instead of modifying these classes, AI should:
- * 1. Use existing component classes (e.g., .btn, .card, .input)
- * 2. Use Tailwind utilities for one-off styling
- * 3. Create new React components rather than new CSS classes
- * 4. Only edit this file for specific bug fixes or accessibility improvements
- * 
- * When AI needs to style something:
- * ✅ Good: <button className="btn btn-primary">Click me</button>
- * ✅ Good: <div className="bg-primary text-white px-4 py-2 rounded">Custom</div>
- * ❌ Bad: Adding new CSS classes here for component-specific styling
- * 
- * This design system is intentionally minimal to prevent bloat and maintain consistency.
+ * This file contains the centralized design system for the mini app with a retro RPG aesthetic.
+ * Features:
+ * - Earthy, muted color palette (browns, beiges, dark greens)
+ * - Window frame-style borders with double lines
+ * - Retro game-inspired styling
  */
 
 @tailwind base;
@@ -25,21 +13,39 @@
 @tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #2d2416;
+  --foreground: #e8dcc0;
+  --rpg-brown: #8b6f47;
+  --rpg-beige: #d4c5a9;
+  --rpg-dark-brown: #5c4a2e;
+  --rpg-darker-brown: #3d2f1f;
+  --rpg-green: #6b8e5a;
+  --rpg-dark-green: #4a5d3d;
+  --rpg-gold: #d4af37;
+  --rpg-shadow: rgba(0, 0, 0, 0.5);
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #f5e6d3;
+    --foreground: #3d2f1f;
+    --rpg-brown: #8b6f47;
+    --rpg-beige: #d4c5a9;
+    --rpg-dark-brown: #5c4a2e;
+    --rpg-darker-brown: #3d2f1f;
+    --rpg-green: #6b8e5a;
+    --rpg-dark-green: #4a5d3d;
+    --rpg-gold: #b8941f;
+    --rpg-shadow: rgba(0, 0, 0, 0.3);
   }
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
-  font-family: 'Inter', Helvetica, Arial, sans-serif;
+  font-family: 'Inter', 'Courier New', monospace, sans-serif;
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
 }
 
 * {
@@ -71,48 +77,85 @@ body {
     @apply mx-auto max-w-sm px-4;
   }
 
-  /* Global card styles */
+  /* Retro RPG Window Frame */
+  .rpg-window {
+    @apply bg-[var(--rpg-darker-brown)] border-[3px] border-double border-[var(--rpg-brown)] shadow-[0_4px_8px_var(--rpg-shadow),inset_0_1px_0_rgba(255,255,255,0.1)] p-4;
+    background-image: 
+      linear-gradient(135deg, rgba(139, 111, 71, 0.1) 0%, transparent 50%),
+      linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%);
+    background-size: 4px 4px;
+  }
+
+  .rpg-window-inner {
+    @apply bg-[var(--rpg-dark-brown)] border-2 border-[var(--rpg-brown)] p-3;
+  }
+
+  /* Global card styles - Retro RPG theme */
   .card {
-    @apply bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 shadow-sm;
+    @apply rpg-window;
   }
   
   .card-primary {
-    @apply bg-primary/10 border-primary/20;
+    @apply bg-[var(--rpg-dark-green)] border-[var(--rpg-green)];
   }
 
-  /* Global button styles */
+  /* Global button styles - Retro RPG theme */
   .btn {
-    @apply inline-flex items-center justify-center rounded-lg px-4 py-2 text-sm font-medium transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none;
+    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none;
+    @apply border-[3px] border-double border-[var(--rpg-brown)] shadow-[0_2px_4px_var(--rpg-shadow),inset_0_1px_0_rgba(255,255,255,0.1)];
+    @apply bg-[var(--rpg-dark-brown)] text-[var(--rpg-beige)];
+    @apply hover:bg-[var(--rpg-brown)] hover:shadow-[0_3px_6px_var(--rpg-shadow),inset_0_1px_0_rgba(255,255,255,0.15)];
+    @apply active:shadow-[inset_0_2px_4px_var(--rpg-shadow)] active:scale-[0.98];
   }
   
   .btn-primary {
-    @apply bg-primary text-white hover:bg-primary-dark focus:ring-primary;
+    @apply bg-[var(--rpg-green)] border-[var(--rpg-dark-green)] text-[var(--rpg-beige)];
+    @apply hover:bg-[var(--rpg-dark-green)] hover:border-[var(--rpg-green)];
   }
   
   .btn-secondary {
-    @apply bg-secondary text-gray-900 hover:bg-gray-200 focus:ring-gray-500 dark:bg-secondary-dark dark:text-gray-100 dark:hover:bg-gray-600;
+    @apply bg-[var(--rpg-brown)] border-[var(--rpg-dark-brown)] text-[var(--rpg-beige)];
+    @apply hover:bg-[var(--rpg-dark-brown)] hover:border-[var(--rpg-brown)];
   }
   
   .btn-outline {
-    @apply border border-gray-300 bg-transparent hover:bg-gray-50 focus:ring-gray-500 dark:border-gray-600 dark:hover:bg-gray-800;
+    @apply bg-transparent border-[var(--rpg-brown)] text-[var(--rpg-beige)];
+    @apply hover:bg-[var(--rpg-dark-brown)]/50;
   }
 
-  /* Global input styles */
+  /* Global input styles - Retro RPG theme */
   .input {
-    @apply block w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 placeholder-gray-500 focus:border-primary focus:outline-none focus:ring-1 focus:ring-primary dark:border-gray-600 dark:bg-gray-800 dark:text-gray-100 dark:placeholder-gray-400;
+    @apply block w-full px-3 py-2 text-[var(--foreground)] placeholder-[var(--rpg-beige)]/50;
+    @apply bg-[var(--rpg-dark-brown)] border-2 border-[var(--rpg-brown)];
+    @apply focus:border-[var(--rpg-green)] focus:outline-none focus:ring-2 focus:ring-[var(--rpg-green)]/20;
+    @apply shadow-[inset_0_2px_4px_var(--rpg-shadow)];
   }
 
-  /* Global loading spinner */
+  /* Global loading spinner - Retro RPG theme */
   .spinner {
-    @apply animate-spin rounded-full border-2 border-gray-300 border-t-primary;
+    @apply animate-spin rounded-full border-2 border-[var(--rpg-brown)] border-t-[var(--rpg-green)];
   }
   
   .spinner-primary {
-    @apply animate-spin rounded-full border-2 border-white border-t-transparent;
+    @apply animate-spin rounded-full border-2 border-[var(--rpg-beige)] border-t-[var(--rpg-green)];
   }
 
   /* Global focus styles */
   .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-primary focus:ring-offset-2;
+    @apply focus:outline-none focus:ring-2 focus:ring-[var(--rpg-green)] focus:ring-offset-2 focus:ring-offset-[var(--rpg-darker-brown)];
+  }
+
+  /* Retro RPG Text Styles */
+  .rpg-title {
+    @apply text-[var(--rpg-gold)] font-bold text-shadow-[0_2px_4px_var(--rpg-shadow)];
+    text-shadow: 0 2px 4px var(--rpg-shadow), 0 0 8px rgba(212, 175, 55, 0.3);
+  }
+
+  .rpg-text {
+    @apply text-[var(--rpg-beige)];
+  }
+
+  .rpg-label {
+    @apply text-[var(--rpg-beige)] font-medium;
   }
 }

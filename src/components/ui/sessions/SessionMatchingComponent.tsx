@@ -139,12 +139,12 @@ export function SessionMatchingComponent() {
 
   // --- Render ---
   return (
-    <div className="space-y-4 p-4 border rounded-lg">
-      <h3 className="text-lg font-semibold">Focus Session Matching</h3>
+    <div className="rpg-window space-y-4">
+      <h3 className="rpg-title text-lg font-semibold mb-4">Focus Session Matching</h3>
 
       {/* Create Session Form */}
-      <div className="space-y-2">
-        <h4 className="text-md font-medium">Create New Session</h4>
+      <div className="space-y-3">
+        <h4 className="rpg-label text-md font-medium">Create New Session</h4>
 
         <div>
           <Label htmlFor="task-description">Task Description</Label>
@@ -190,14 +190,14 @@ export function SessionMatchingComponent() {
 
       {/* Existing Sessions */}
       {sessions.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-md font-medium">Join Existing Sessions</h4>
+        <div className="space-y-3">
+          <h4 className="rpg-label text-md font-medium">Join Existing Sessions</h4>
           {sessions.map((session) => (
-            <div key={session.id} className="border rounded p-2">
-              <p><strong>Task:</strong> {session.taskDescription}</p>
-              <p><strong>Duration:</strong> {session.duration} minutes</p>
-              <p><strong>Start:</strong> {new Date(session.startTime).toLocaleString()}</p>
-              <p><strong>Participants:</strong> {session.participants.length}</p>
+            <div key={session.id} className="rpg-window-inner p-3 space-y-2">
+              <p className="rpg-text"><strong className="rpg-label">Task:</strong> {session.taskDescription}</p>
+              <p className="rpg-text"><strong className="rpg-label">Duration:</strong> {session.duration} minutes</p>
+              <p className="rpg-text"><strong className="rpg-label">Start:</strong> {new Date(session.startTime).toLocaleString()}</p>
+              <p className="rpg-text"><strong className="rpg-label">Participants:</strong> {session.participants.length}</p>
               <Button
                 onClick={() => handleJoinSession(session.id)}
                 disabled={session.participants.includes(context?.user?.fid || 0) || isJoining === session.id}
@@ -213,13 +213,13 @@ export function SessionMatchingComponent() {
 
       {/* Matched Users */}
       {matchedUsers.length > 0 && (
-        <div className="space-y-2">
-          <h4 className="text-md font-medium">Matched Users</h4>
+        <div className="space-y-3">
+          <h4 className="rpg-label text-md font-medium">Matched Users</h4>
           <div className="grid grid-cols-1 gap-2">
             {matchedUsers.map((user) => (
-              <div key={user.fid} className="border rounded p-2">
-                <p><strong>Username:</strong> {user.username}</p>
-                <p><strong>FID:</strong> {user.fid}</p>
+              <div key={user.fid} className="rpg-window-inner p-2">
+                <p className="rpg-text"><strong className="rpg-label">Username:</strong> {user.username}</p>
+                <p className="rpg-text"><strong className="rpg-label">FID:</strong> {user.fid}</p>
               </div>
             ))}
           </div>
