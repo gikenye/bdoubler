@@ -126,7 +126,7 @@ export function ActionsTab() {
 
   // --- Render ---
   return (
-    <div className="space-y-3 px-6 w-full max-w-md mx-auto">
+    <div className="space-y-4 p-4 w-full max-w-md mx-auto">
       {/* Share functionality */}
       {/* <ShareButton
         buttonText="Share Mini App"
