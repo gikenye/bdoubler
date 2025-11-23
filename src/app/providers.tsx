@@ -7,6 +7,7 @@ import { AuthKitProvider } from '@farcaster/auth-kit';
 import { MiniAppProvider } from '@neynar/react';
 import { SafeFarcasterSolanaProvider } from '~/components/providers/SafeFarcasterSolanaProvider';
 import { ANALYTICS_ENABLED, RETURN_URL } from '~/lib/constants';
+import { Toaster } from '~/components/ui/sonner';
 
 const WagmiProvider = dynamic(
   () => import('~/components/providers/WagmiProvider'),
@@ -35,6 +36,7 @@ export function Providers({
           <SafeFarcasterSolanaProvider endpoint={solanaEndpoint}>
             <AuthKitProvider config={{}}>
               {children}
+              <Toaster />
             </AuthKitProvider>
           </SafeFarcasterSolanaProvider>
         </MiniAppProvider>

@@ -6,16 +6,17 @@ import {
   SelfQRcodeWrapper,
   SelfAppBuilder,
   type SelfApp,
-  countries, 
+  countries,
   getUniversalLink,
 } from "@selfxyz/qrcode";
 import { ethers } from "ethers";
+import { Button } from "~/components/ui/button";
+import { Card, CardContent } from "~/components/ui/card";
+import { Label } from "~/components/ui/label";
+import { toast } from "sonner";
 
 export default function Home() {
   const router = useRouter();
-  const [linkCopied, setLinkCopied] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-  const [toastMessage, setToastMessage] = useState("");
   const [selfApp, setSelfApp] = useState<SelfApp | null>(null);
   const [universalLink, setUniversalLink] = useState("");
   const [userId] = useState(ethers.ZeroAddress);
@@ -68,25 +69,17 @@ export default function Home() {
     }
   }, [excludedCountries, userId]);
 
-  const displayToast = (message: string) => {
-    setToastMessage(message);
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
-
   const copyToClipboard = () => {
     if (!universalLink) return;
 
     navigator.clipboard
       .writeText(universalLink)
       .then(() => {
-        setLinkCopied(true);
-        displayToast("Universal link copied to clipboard!");
-        setTimeout(() => setLinkCopied(false), 2000);
+        toast("Universal link copied to clipboard!");
       })
       .catch((err) => {
         console.error("Failed to copy text: ", err);
-        displayToast("Failed to copy link");
+        toast("Failed to copy link");
       });
   };
 
@@ -94,11 +87,11 @@ export default function Home() {
     if (!universalLink) return;
 
     window.open(universalLink, "_blank");
-    displayToast("Opening Self App...");
+    toast("Opening Self App...");
   };
 
   const handleSuccessfulVerification = () => {
-    displayToast("Verification successful! Redirecting...");
+    toast("Verification successful! Redirecting...");
     setTimeout(() => {
       router.push("/verified");
     }, 1500);
@@ -115,60 +108,52 @@ export default function Home() {
           Scan QR code with Self Protocol App to verify your identity
         </p>
       </div>
-
-      {/* Main content */}
-      <div className="bg-white rounded-xl shadow-lg p-4 sm:p-6 w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto">
-        <div className="flex justify-center mb-4 sm:mb-6">
-          {selfApp ? (
-            <SelfQRcodeWrapper
-              selfApp={selfApp}
-              onSuccess={handleSuccessfulVerification}
-              onError={() => {
-                displayToast("Error: Failed to verify identity");
-              }}
-            />
-          ) : (
-            <div className="w-[256px] h-[256px] bg-gray-200 animate-pulse flex items-center justify-center">
-              <p className="text-gray-500 text-sm">Loading QR Code...</p>
-            </div>
-          )}
+{/* Main content */}
+<Card className="w-full max-w-xs sm:max-w-sm md:max-w-md mx-auto">
+  <CardContent className="p-4 sm:p-6">
+    <div className="flex justify-center mb-4 sm:mb-6">
+      {selfApp ? (
+        <SelfQRcodeWrapper
+          selfApp={selfApp}
+          onSuccess={handleSuccessfulVerification}
+          onError={() => {
+            toast("Error: Failed to verify identity");
+          }}
+        />
+      ) : (
+        <div className="w-[256px] h-[256px] bg-muted animate-pulse flex items-center justify-center rounded">
+          <p className="text-muted-foreground text-sm">Loading QR Code...</p>
         </div>
+      )}
+    </div>
 
-        <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2 mb-4 sm:mb-6">
-          <button
-            type="button"
-            onClick={copyToClipboard}
-            disabled={!universalLink}
-            className="flex-1 bg-gray-800 hover:bg-gray-700 transition-colors text-white p-2 rounded-md text-sm sm:text-base disabled:bg-gray-400 disabled:cursor-not-allowed"
-          >
-            {linkCopied ? "Copied!" : "Copy Universal Link"}
-          </button>
+    <div className="flex flex-col sm:flex-row gap-2 sm:space-x-2 mb-4 sm:mb-6">
+      <Button
+        onClick={copyToClipboard}
+        disabled={!universalLink}
+        variant="secondary"
+        className="flex-1"
+      >
+        Copy Universal Link
+      </Button>
 
-          <button
-            type="button"
-            onClick={openSelfApp}
-            disabled={!universalLink}
-            className="flex-1 bg-blue-600 hover:bg-blue-500 transition-colors text-white p-2 rounded-md text-sm sm:text-base mt-2 sm:mt-0 disabled:bg-blue-300 disabled:cursor-not-allowed"
-          >
-            Open Self App
-          </button>
+      <Button
+        onClick={openSelfApp}
+        disabled={!universalLink}
+        className="flex-1"
+      >
+        Open Self App
+      </Button>
+    </div>
 
-
-        </div>
-        <div className="flex flex-col items-center gap-2 mt-2">
-          <span className="text-gray-500 text-xs uppercase tracking-wide">User Address</span>
-          <div className="bg-gray-100 rounded-md px-3 py-2 w-full text-center break-all text-sm font-mono text-gray-800 border border-gray-200">
-            {userId ? userId : <span className="text-gray-400">Not connected</span>}
-          </div>
-        </div>
-
-        {/* Toast notification */}
-        {showToast && (
-          <div className="fixed bottom-4 right-4 bg-gray-800 text-white py-2 px-4 rounded shadow-lg animate-fade-in text-sm">
-            {toastMessage}
-          </div>
-        )}
+    <div className="flex flex-col items-center gap-2 mt-2">
+      <Label className="text-xs uppercase tracking-wide">User Address</Label>
+      <div className="bg-muted rounded-md px-3 py-2 w-full text-center break-all text-sm font-mono border">
+        {userId ? userId : <span className="text-muted-foreground">Not connected</span>}
       </div>
+    </div>
+  </CardContent>
+</Card>
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Link from "next/link";
 import { APP_NAME } from "~/lib/constants";
 import { useQuickAuth } from "~/hooks/useQuickAuth";
 import { useNeynarUser } from "~/hooks/useNeynarUser";
@@ -29,8 +30,13 @@ export function Header() {
       <div
         className="mt-4 mb-4 mx-4 px-3 py-3 rpg-window flex items-center justify-between"
       >
-        <div className="rpg-title text-lg font-bold">
-          Welcome to {APP_NAME}!
+        <div className="flex items-center gap-4">
+          <div className="rpg-title text-lg font-bold">
+            Welcome to {APP_NAME}!
+          </div>
+          <Button asChild className="btn btn-primary">
+            <Link href="/verify">Verify Humanity</Link>
+          </Button>
         </div>
         {status === 'authenticated' && userData ? (
           <div
