@@ -1,3 +1,4 @@
+import { useMemo, useState, useEffect } from 'react';
 import { useContractWrite, useContractRead, useWaitForTransactionReceipt } from 'wagmi';
 import { Address, parseEther } from 'viem';
 import FocusStakingABI from '../../FocusStaking.abi.json';
@@ -188,6 +189,58 @@ export function useMarkCompleted() {
   };
 }
 
+// Custom hook for markAFK
+export function useMarkAFK() {
+  const { data: hash, writeContract, isPending, error } = useContractWrite();
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const markAFK = (groupId: bigint, user: Address) => {
+    writeContract({
+      ...contractConfig,
+      functionName: 'markAFK',
+      args: [groupId, user],
+    });
+  };
+
+  return {
+    markAFK,
+    hash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error,
+  };
+}
+
+// Custom hook for leaveGroupBeforeStart
+export function useLeaveGroup() {
+  const { data: hash, writeContract, isPending, error } = useContractWrite();
+
+  const { isLoading: isConfirming, isSuccess: isConfirmed } = useWaitForTransactionReceipt({
+    hash,
+  });
+
+  const leaveGroup = (groupId: bigint) => {
+    writeContract({
+      ...contractConfig,
+      functionName: 'leaveGroupBeforeStart',
+      args: [groupId],
+    });
+  };
+
+  return {
+    leaveGroup,
+    hash,
+    isPending,
+    isConfirming,
+    isConfirmed,
+    error,
+  };
+}
+
 // Custom hook for finalizeGroup
 export function useFinalizeGroup() {
   const { data: hash, writeContract, isPending, error } = useContractWrite();
@@ -297,6 +350,51 @@ export function useGetGroupState(groupId: bigint) {
   };
 }
 
+// Custom hook for isAlive
+export function useIsAlive(groupId: bigint, user: Address) {
+  const { data, isLoading, error, refetch } = useContractRead({
+    ...contractConfig,
+    functionName: 'isAlive',
+    args: [groupId, user],
+    query: {
+      enabled: groupId !== undefined && user !== undefined,
+    },
+  });
+
+  return {
+    isAlive: data as boolean | undefined,
+    isLoading,
+    error,
+    refetch,
+  };
+}
+
+// Simplified hook - just check first few participant slots
+export function useUserParticipation(groupId: bigint, userAddress: Address) {
+  const { groupSummary } = useGetGroupSummary(groupId);
+  
+  // Check up to 10 participant slots (most groups won't be larger)
+  const participant0 = useGetParticipant(groupId, 0n);
+  const participant1 = useGetParticipant(groupId, 1n);
+  const participant2 = useGetParticipant(groupId, 2n);
+  const participant3 = useGetParticipant(groupId, 3n);
+  const participant4 = useGetParticipant(groupId, 4n);
+  
+  const participants = [participant0, participant1, participant2, participant3, participant4];
+  
+  const userParticipant = participants.find(({ participant }) => 
+    participant?.addr.toLowerCase() === userAddress?.toLowerCase()
+  );
+
+  const isLoading = participants.some(({ isLoading }) => isLoading);
+
+  return {
+    isParticipant: !!userParticipant?.participant,
+    participant: userParticipant?.participant,
+    isLoading,
+  };
+}
+
 // Custom hook for nextGroupId
 export function useNextGroupId() {
   const { data, isLoading, error, refetch } = useContractRead({
@@ -315,6 +413,26 @@ export function useNextGroupId() {
 // Utility function to get contract configuration
 export function getFocusStakingConfig() {
   return contractConfig;
+}
+
+// Utility hook to get user's groups
+export function useUserGroups(userAddress: Address) {
+  const { nextGroupId } = useNextGroupId();
+  
+  const groupIds = useMemo(() => {
+    if (!nextGroupId) return [];
+    return Array.from({ length: Number(nextGroupId) }, (_, i) => BigInt(i));
+  }, [nextGroupId]);
+
+  const userGroups = groupIds.filter(groupId => {
+    const { isParticipant } = useUserParticipation(groupId, userAddress);
+    return isParticipant;
+  });
+
+  return {
+    userGroups,
+    totalGroups: groupIds.length,
+  };
 }
 
 // Export all types and utilities

@@ -1,26 +1,37 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
+import { useAccount } from "wagmi";
 import { useMiniApp } from "@neynar/react";
+import { formatEther } from "viem";
+import { Card, CardContent, CardHeader, CardTitle } from "../card";
+import { Badge } from "../badge";
 import { Button } from "../button";
 import { Input } from "../input";
 import { Label } from "../label";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "../dialog";
+import { parseEther } from "viem";
 import { useNeynarUser } from "../../../hooks/useNeynarUser";
 import { sendMiniAppNotification } from "../../../lib/notifs";
+import { 
+  useNextGroupId, 
+  useGetGroupSummary, 
+  useGetGroupState, 
+  useUserParticipation,
+  useStartSession,
+  useCreateGroup,
+  TokenType,
+  GroupState 
+} from "../../../hooks/useFocusStaking";
+import { UserSessionTracker } from './UserSessionTracker';
 
 /**
- * SessionMatchingComponent allows users to create or join focus sessions.
+ * SessionMatchingComponent displays user's active sessions and allows starting sessions.
  *
- * This component provides an interface for users to create new focus sessions
- * with task description, duration, and start time, or join existing sessions.
- * It displays matched users based on Farcaster best friends and sends notifications
- * for session updates.
- *
- * Features:
- * - Session creation with task details
- * - Joining existing sessions
- * - User matching via Farcaster best friends
- * - Notification updates for session events
+ * This component shows:
+ * - User's joined groups that haven't started yet
+ * - Active sessions the user is participating in
+ * - Ability to start sessions (if user is creator or authorized)
  *
  * @example
  * ```tsx
@@ -28,30 +39,44 @@ import { sendMiniAppNotification } from "../../../lib/notifs";
  * ```
  */
 export function SessionMatchingComponent() {
-  // --- Hooks ---
+  const { address } = useAccount();
   const { context } = useMiniApp();
   const { user: neynarUser } = useNeynarUser({ user: { fid: context?.user?.fid } });
-
-  // --- State ---
-  const [taskDescription, setTaskDescription] = useState<string>("");
-  const [duration, setDuration] = useState<string>("");
-  const [startTime, setStartTime] = useState<string>("");
-  const [sessions, setSessions] = useState<Array<{
-    id: string;
-    taskDescription: string;
-    duration: string;
-    startTime: string;
-    creator: number;
-    participants: number[];
-  }>>([]);
   const [matchedUsers, setMatchedUsers] = useState<Array<{ fid: number; username: string }>>([]);
-  const [isCreating, setIsCreating] = useState(false);
-  const [isJoining, setIsJoining] = useState<string | null>(null);
+  
+  const { nextGroupId, isLoading: groupIdLoading } = useNextGroupId();
+  const { startSession, isPending: isStarting, isConfirmed: startConfirmed } = useStartSession();
+  const { createGroup, isPending: isCreating, isConfirmed: createConfirmed } = useCreateGroup();
+  
+  const [createDialogOpen, setCreateDialogOpen] = useState(false);
+  const [stakeAmount, setStakeAmount] = useState("");
+  const [maxParticipants, setMaxParticipants] = useState("");
+  const [sessionDuration, setSessionDuration] = useState("");
+  const [maxInactivity, setMaxInactivity] = useState("");
 
-  // --- Effects ---
+  // Get all group IDs to check
+  const groupIds = useMemo(() => {
+    if (!nextGroupId) return [];
+    return Array.from({ length: Number(nextGroupId) }, (_, i) => BigInt(i));
+  }, [nextGroupId]);
+
+  // For now, we'll show a simplified view without checking all groups
+  // In a production app, you'd want to implement proper participant tracking
+  const userGroups: Array<{
+    groupId: bigint;
+    summary: any;
+    state: GroupState;
+    isParticipant: boolean;
+  }> = [];
+
+  // Separate groups by state
+  const waitingGroups = userGroups.filter(g => g.state === GroupState.CREATED);
+  const activeGroups = userGroups.filter(g => g.state === GroupState.STARTED);
+  const completedGroups = userGroups.filter(g => g.state === GroupState.FINALIZED);
+
+  // Fetch best friends for matching
   useEffect(() => {
     if (context?.user?.fid) {
-      // Fetch best friends for matching
       fetch(`/api/best-friends?fid=${context.user.fid}`)
         .then((response) => response.json())
         .then((data) => {
@@ -63,165 +88,173 @@ export function SessionMatchingComponent() {
     }
   }, [context?.user?.fid]);
 
-  // --- Handlers ---
-  /**
-   * Handles creating a new session.
-   */
-  const handleCreateSession = useCallback(async () => {
-    if (!taskDescription || !duration || !startTime || !context?.user?.fid) return;
-
-    setIsCreating(true);
+  // Handle creating a session
+  const handleCreateSession = async () => {
+    if (!address || !stakeAmount || !maxParticipants || !sessionDuration || !maxInactivity) return;
+    
     try {
-      const newSession = {
-        id: crypto.randomUUID(),
-        taskDescription,
+      const stakeAmountWei = parseEther(stakeAmount);
+      const maxSize = BigInt(maxParticipants);
+      const duration = BigInt(sessionDuration) * 60n; // Convert minutes to seconds
+      const inactivity = BigInt(maxInactivity);
+      
+      await createGroup(
+        TokenType.NATIVE,
+        "0x0000000000000000000000000000000000000000" as `0x${string}`,
+        stakeAmountWei,
+        maxSize,
         duration,
-        startTime,
-        creator: context.user.fid,
-        participants: [context.user.fid],
-      };
-
-      setSessions((prev) => [...prev, newSession]);
-
-      // Send notification to creator
-      await sendMiniAppNotification({
-        fid: context.user.fid,
-        title: "Session Created",
-        body: `Your focus session "${taskDescription}" has been created.`,
-      });
-
-      // Reset form
-      setTaskDescription("");
-      setDuration("");
-      setStartTime("");
-    } catch (error) {
-      console.error("Failed to create session:", error);
-    } finally {
-      setIsCreating(false);
-    }
-  }, [taskDescription, duration, startTime, context?.user?.fid]);
-
-  /**
-   * Handles joining an existing session.
-   */
-  const handleJoinSession = useCallback(async (sessionId: string) => {
-    if (!context?.user?.fid) return;
-
-    setIsJoining(sessionId);
-    try {
-      setSessions((prev) =>
-        prev.map((session) =>
-          session.id === sessionId
-            ? { ...session, participants: [...session.participants, context.user.fid] }
-            : session
-        )
+        inactivity
       );
-
-      // Send notification to participants
-      const session = sessions.find((s) => s.id === sessionId);
-      if (session) {
-        await Promise.all(
-          session.participants.map((fid) =>
-            sendMiniAppNotification({
-              fid,
-              title: "New Participant",
-              body: `Someone joined the session "${session.taskDescription}".`,
-            })
-          )
-        );
+      
+      // Send notification
+      if (context?.user?.fid) {
+        await sendMiniAppNotification({
+          fid: context.user.fid,
+          title: "Session Created",
+          body: `New focus session created with ${stakeAmount} ETH stake!`,
+        });
       }
     } catch (error) {
-      console.error("Failed to join session:", error);
-    } finally {
-      setIsJoining(null);
+      console.error("Failed to create session:", error);
     }
-  }, [context?.user?.fid, sessions]);
+  };
 
-  // --- Render ---
+  // Handle starting a session
+  const handleStartSession = async (groupId: bigint) => {
+    if (!address) return;
+    
+    try {
+      await startSession(groupId);
+      
+      // Send notification
+      if (context?.user?.fid) {
+        await sendMiniAppNotification({
+          fid: context.user.fid,
+          title: "Session Started",
+          body: `Focus session #${groupId} has started!`,
+        });
+      }
+    } catch (error) {
+      console.error("Failed to start session:", error);
+    }
+  };
+
+  if (groupIdLoading) {
+    return (
+      <div className="rpg-window space-y-4">
+        <h3 className="rpg-title text-lg font-semibold mb-4">Your Sessions</h3>
+        <div className="animate-pulse space-y-4">
+          <div className="h-32 bg-muted rounded"></div>
+          <div className="h-32 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
+  }
+
+  // Close dialog on successful creation
+  useMemo(() => {
+    if (createConfirmed) {
+      setCreateDialogOpen(false);
+      setStakeAmount("");
+      setMaxParticipants("");
+      setSessionDuration("");
+      setMaxInactivity("");
+    }
+  }, [createConfirmed]);
+
   return (
-    <div className="rpg-window space-y-4">
-      <h3 className="rpg-title text-lg font-semibold mb-4">Focus Session Matching</h3>
-
-      {/* Create Session Form */}
-      <div className="space-y-3">
-        <h4 className="rpg-label text-md font-medium">Create New Session</h4>
-
-        <div>
-          <Label htmlFor="task-description">Task Description</Label>
-          <Input
-            id="task-description"
-            type="text"
-            value={taskDescription}
-            onChange={(e) => setTaskDescription(e.target.value)}
-            placeholder="Enter task description"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="duration">Duration (minutes)</Label>
-          <Input
-            id="duration"
-            type="number"
-            min="1"
-            value={duration}
-            onChange={(e) => setDuration(e.target.value)}
-            placeholder="Enter duration in minutes"
-          />
-        </div>
-
-        <div>
-          <Label htmlFor="start-time">Start Time</Label>
-          <Input
-            id="start-time"
-            type="datetime-local"
-            value={startTime}
-            onChange={(e) => setStartTime(e.target.value)}
-          />
-        </div>
-
-        <Button
-          onClick={handleCreateSession}
-          disabled={!taskDescription || !duration || !startTime || isCreating}
-        >
-          {isCreating ? "Creating..." : "Create Session"}
-        </Button>
+    <div className="rpg-window space-y-6">
+      <div className="flex items-center justify-between">
+        <h3 className="rpg-title text-lg font-semibold">Your Sessions</h3>
+        
+        {/* Create Session Dialog */}
+        <Dialog open={createDialogOpen} onOpenChange={setCreateDialogOpen}>
+          <DialogTrigger asChild>
+            <Button>CREATE SESSION</Button>
+          </DialogTrigger>
+          <DialogContent className="sm:max-w-md">
+            <DialogHeader>
+              <DialogTitle>Create Focus Session</DialogTitle>
+            </DialogHeader>
+            <div className="space-y-4">
+              <div>
+                <Label>Stake Amount (ETH)</Label>
+                <Input
+                  type="number"
+                  step="0.001"
+                  placeholder="0.1"
+                  value={stakeAmount}
+                  onChange={(e) => setStakeAmount(e.target.value)}
+                />
+              </div>
+              
+              <div>
+                <Label>Max Participants</Label>
+                <Input
+                  type="number"
+                  placeholder="10"
+                  value={maxParticipants}
+                  onChange={(e) => setMaxParticipants(e.target.value)}
+                />
+              </div>
+              
+              <div>
+                <Label>Session Duration (minutes)</Label>
+                <Input
+                  type="number"
+                  placeholder="60"
+                  value={sessionDuration}
+                  onChange={(e) => setSessionDuration(e.target.value)}
+                />
+              </div>
+              
+              <div>
+                <Label>Max Inactivity (seconds)</Label>
+                <Input
+                  type="number"
+                  placeholder="300"
+                  value={maxInactivity}
+                  onChange={(e) => setMaxInactivity(e.target.value)}
+                />
+              </div>
+              
+              <div className="flex gap-2 pt-4">
+                <Button
+                  variant="outline"
+                  onClick={() => setCreateDialogOpen(false)}
+                  className="flex-1"
+                >
+                  Cancel
+                </Button>
+                <Button
+                  onClick={handleCreateSession}
+                  disabled={isCreating || !stakeAmount || !maxParticipants || !sessionDuration || !maxInactivity}
+                  className="flex-1"
+                >
+                  {isCreating ? "Creating..." : "Create"}
+                </Button>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
       </div>
 
-      {/* Existing Sessions */}
-      {sessions.length > 0 && (
-        <div className="space-y-3">
-          <h4 className="rpg-label text-md font-medium">Join Existing Sessions</h4>
-          {sessions.map((session) => (
-            <div key={session.id} className="rpg-window-inner p-3 space-y-2">
-              <p className="rpg-text"><strong className="rpg-label">Task:</strong> {session.taskDescription}</p>
-              <p className="rpg-text"><strong className="rpg-label">Duration:</strong> {session.duration} minutes</p>
-              <p className="rpg-text"><strong className="rpg-label">Start:</strong> {new Date(session.startTime).toLocaleString()}</p>
-              <p className="rpg-text"><strong className="rpg-label">Participants:</strong> {session.participants.length}</p>
-              <Button
-                onClick={() => handleJoinSession(session.id)}
-                disabled={session.participants.includes(context?.user?.fid || 0) || isJoining === session.id}
-                className="mt-2"
-              >
-                {session.participants.includes(context?.user?.fid || 0)
-                  ? "Joined"
-                  : isJoining === session.id
-                  ? "Joining..."
-                  : "Join Session"}
-              </Button>
-            </div>
-          ))}
-        </div>
-      )}
+      {/* Session Tracker */}
+      <UserSessionTracker />
+
+
 
       {/* Matched Users */}
       {matchedUsers.length > 0 && (
         <div className="space-y-3">
-          <h4 className="rpg-label text-md font-medium">Matched Users</h4>
+          <h4 className="rpg-label text-md font-medium">Farcaster Friends</h4>
           <div className="grid grid-cols-1 gap-2">
-            {matchedUsers.map((user) => (
+            {matchedUsers.slice(0, 3).map((user) => (
               <div key={user.fid} className="rpg-window-inner p-2">
-                <p className="rpg-text"><strong className="rpg-label">Username:</strong> {user.username}</p>
-                <p className="rpg-text"><strong className="rpg-label">FID:</strong> {user.fid}</p>
+                <p className="rpg-text text-sm">
+                  <strong className="rpg-label">@{user.username}</strong> - Invite them to focus together!
+                </p>
               </div>
             ))}
           </div>

@@ -5,18 +5,18 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "./ui/tabs";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 import { Switch } from "./ui/switch";
-import { 
-  Users, 
-  Clock, 
-  Video, 
-  Mic, 
-  MessageSquare, 
-  Plus, 
+import {
+  Users,
+  Clock,
+  Video,
+  Mic,
+  MessageSquare,
+  Plus,
   Search,
   BookOpen,
   Code,
   Palette,
-  TrendingUp
+  TrendingUp,
 } from "lucide-react";
 
 interface SessionBookingScreenProps {
@@ -24,7 +24,10 @@ interface SessionBookingScreenProps {
   onJoinSession: () => void;
 }
 
-export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingScreenProps) {
+export function SessionBookingScreen({
+  onBack,
+  onJoinSession,
+}: SessionBookingScreenProps) {
   const sessions = [
     {
       id: 1,
@@ -81,14 +84,16 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
       <div className="p-4">
         <div className="mb-4">
           <h2 className="text-white mb-1">SESSION ROOMS</h2>
-          <p className="text-muted-foreground text-sm">Join or create a focus session</p>
+          <p className="text-muted-foreground text-sm">
+            Join or create a focus session
+          </p>
         </div>
-        
+
         {/* Search */}
         <div className="relative mb-6">
           <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40" />
           <input
-            placeholder="Search sessions..." 
+            placeholder="Search sessions..."
             className="w-full h-12 pl-12 pr-4 rounded-xl bg-[#252133] border-4 border-[#3d3847] text-white placeholder:text-white/40 focus:outline-none focus:border-[#00d9ff] transition-colors"
           />
         </div>
@@ -96,13 +101,13 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
         <Tabs defaultValue="join" className="w-full">
           <div className="game-card bg-[#252133] border-[#4a4556] p-1.5 mb-6">
             <TabsList className="grid w-full grid-cols-2 bg-transparent gap-2 p-0">
-              <TabsTrigger 
+              <TabsTrigger
                 value="join"
                 className="game-button border-[#00d9ff] data-[state=active]:bg-[#00d9ff] data-[state=active]:text-[#1a1625] bg-transparent data-[state=inactive]:border-[#3d3847] data-[state=inactive]:text-white/60 h-12"
               >
                 Join Room
               </TabsTrigger>
-              <TabsTrigger 
+              <TabsTrigger
                 value="create"
                 className="game-button border-[#00d9ff] data-[state=active]:bg-[#00d9ff] data-[state=active]:text-[#1a1625] bg-transparent data-[state=inactive]:border-[#3d3847] data-[state=inactive]:text-white/60 h-12"
               >
@@ -114,7 +119,7 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
           {/* Join Session Tab */}
           <TabsContent value="join" className="space-y-3 mt-0">
             {sessions.map((session) => (
-              <div 
+              <div
                 key={session.id}
                 className="game-card bg-[#252133] border-[#4a4556] hover:border-[#00d9ff] transition-all cursor-pointer"
                 onClick={onJoinSession}
@@ -122,11 +127,11 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
                 <div className="p-4">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
-                      <div 
+                      <div
                         className="w-14 h-14 rounded-xl flex items-center justify-center border-2 text-white"
-                        style={{ 
+                        style={{
                           backgroundColor: `${session.color}15`,
-                          borderColor: `${session.color}50`
+                          borderColor: `${session.color}50`,
                         }}
                       >
                         <div style={{ color: session.color }}>
@@ -143,12 +148,12 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
                         </div>
                       </div>
                     </div>
-                    <div 
+                    <div
                       className="rounded-lg px-3 py-1.5 text-sm border-2"
-                      style={{ 
+                      style={{
                         backgroundColor: `${session.color}15`,
                         borderColor: `${session.color}50`,
-                        color: session.color
+                        color: session.color,
                       }}
                     >
                       {session.participants}/{session.maxParticipants}
@@ -162,7 +167,7 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
                         {session.participants} active
                       </span>
                     </div>
-                    
+
                     <div className="flex items-center gap-2">
                       {session.hasVideo && (
                         <div className="w-7 h-7 rounded-lg bg-[#00d9ff]/10 border-2 border-[#00d9ff]/30 flex items-center justify-center">
@@ -191,50 +196,72 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
             <div className="game-card bg-[#252133] border-[#4a4556] p-4">
               <div className="space-y-4">
                 <div>
-                  <Label htmlFor="topic" className="text-sm text-white/70 mb-2 block">Session Topic</Label>
+                  <Label
+                    htmlFor="topic"
+                    className="text-sm text-white/70 mb-2 block"
+                  >
+                    Session Topic
+                  </Label>
                   <input
                     id="topic"
-                    placeholder="e.g., Python Study, Meditation..." 
+                    placeholder="e.g., Python Study, Meditation..."
                     className="w-full h-12 px-4 rounded-xl bg-[#1a1625] border-4 border-[#3d3847] text-white placeholder:text-white/40 focus:outline-none focus:border-[#00d9ff] transition-colors"
                   />
                 </div>
 
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <Label htmlFor="duration" className="text-sm text-white/70 mb-2 block">Duration (min)</Label>
+                    <Label
+                      htmlFor="duration"
+                      className="text-sm text-white/70 mb-2 block"
+                    >
+                      Duration (min)
+                    </Label>
                     <input
                       id="duration"
                       type="number"
-                      placeholder="60" 
+                      placeholder="60"
                       className="w-full h-12 px-4 rounded-xl bg-[#1a1625] border-4 border-[#3d3847] text-white placeholder:text-white/40 focus:outline-none focus:border-[#00d9ff] transition-colors"
                     />
                   </div>
 
                   <div>
-                    <Label htmlFor="max-participants" className="text-sm text-white/70 mb-2 block">Max Players</Label>
+                    <Label
+                      htmlFor="max-participants"
+                      className="text-sm text-white/70 mb-2 block"
+                    >
+                      Max Players
+                    </Label>
                     <input
                       id="max-participants"
                       type="number"
-                      placeholder="5" 
+                      placeholder="5"
                       className="w-full h-12 px-4 rounded-xl bg-[#1a1625] border-4 border-[#3d3847] text-white placeholder:text-white/40 focus:outline-none focus:border-[#00d9ff] transition-colors"
                     />
                   </div>
                 </div>
 
                 <div>
-                  <Label htmlFor="stake" className="text-sm text-white/70 mb-2 block">Stake Amount (ETH)</Label>
+                  <Label
+                    htmlFor="stake"
+                    className="text-sm text-white/70 mb-2 block"
+                  >
+                    Stake Amount (CELO)
+                  </Label>
                   <input
                     id="stake"
                     type="number"
                     step="0.001"
-                    placeholder="0.01" 
+                    placeholder="0.01"
                     className="w-full h-12 px-4 rounded-xl bg-[#1a1625] border-4 border-[#3d3847] text-white placeholder:text-white/40 focus:outline-none focus:border-[#00d9ff] transition-colors"
                   />
                 </div>
 
                 <div className="space-y-3 pt-2">
-                  <Label className="text-sm text-white/70">Communication Options</Label>
-                  
+                  <Label className="text-sm text-white/70">
+                    Communication Options
+                  </Label>
+
                   <div className="game-card bg-[#1a1625] border-[#3d3847] p-3 flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <Video className="w-5 h-5 text-[#00d9ff]" />
@@ -262,9 +289,7 @@ export function SessionBookingScreen({ onBack, onJoinSession }: SessionBookingSc
               </div>
             </div>
 
-            <button 
-              className="w-full h-14 game-button bg-[#00d9ff] border-[#00d9ff] text-[#1a1625] flex items-center justify-center gap-3"
-            >
+            <button className="w-full h-14 game-button bg-[#00d9ff] border-[#00d9ff] text-[#1a1625] flex items-center justify-center gap-3">
               <Plus className="w-5 h-5" />
               CREATE SESSION
             </button>

@@ -12,10 +12,10 @@ import { truncateAddress } from "../../../lib/truncateAddress";
 import { renderError } from "../../../lib/errorUtils";
 
 /**
- * SendEth component handles sending ETH transactions to protocol guild addresses.
+ * SendEth component handles sending CELO transactions to protocol guild addresses.
  *
  * This component provides a simple interface for users to send small amounts
- * of ETH to protocol guild addresses. It automatically selects the appropriate
+ * of CELO to protocol guild addresses. It automatically selects the appropriate
  * recipient address based on the current chain and displays transaction status.
  *
  * Features:
@@ -66,9 +66,9 @@ export function SendEth() {
 
   // --- Handlers ---
   /**
-   * Handles sending the ETH transaction.
+   * Handles sending the CELO transaction.
    *
-   * This function sends a small amount of ETH (1 wei) to the protocol guild
+   * This function sends a small amount of CELO (1 wei) to the protocol guild
    * address for the current chain. The transaction is sent using the wagmi
    * sendTransaction hook.
    */

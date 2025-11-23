@@ -30,6 +30,7 @@ interface RewardData {
  */
 interface RewardsDisplayComponentProps {
   rewardData: RewardData;
+  isLoading?: boolean;
 }
 
 /**
@@ -49,7 +50,7 @@ interface RewardsDisplayComponentProps {
  * <RewardsDisplayComponent rewardData={userRewardData} />
  * ```
  */
-export function RewardsDisplayComponent({ rewardData }: RewardsDisplayComponentProps) {
+export function RewardsDisplayComponent({ rewardData, isLoading = false }: RewardsDisplayComponentProps) {
   const { stakeReturns, groupBonuses, totalEarnings, sessionHistory } = rewardData;
 
   // Calculate progress percentages for visualization
@@ -61,6 +62,25 @@ export function RewardsDisplayComponent({ rewardData }: RewardsDisplayComponentP
   const stakeProgress = (stakeReturns / maxEarnings) * 100;
   const bonusProgress = (groupBonuses / maxEarnings) * 100;
   const totalProgress = (totalEarnings / maxEarnings) * 100;
+
+  if (isLoading) {
+    return (
+      <div className="rpg-window space-y-6">
+        <h3 className="rpg-title text-xl font-semibold flex items-center gap-2">
+          <Trophy className="w-5 h-5 text-rpg-gold" />
+          Your Rewards
+        </h3>
+        <div className="animate-pulse space-y-4">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="h-24 bg-muted rounded"></div>
+            <div className="h-24 bg-muted rounded"></div>
+            <div className="h-24 bg-muted rounded"></div>
+          </div>
+          <div className="h-32 bg-muted rounded"></div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="rpg-window space-y-6">
