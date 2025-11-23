@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Button } from "../Button";
+import { Button } from "../button";
 import { renderError } from "../../../lib/errorUtils";
 
 interface SignSolanaMessageProps {
@@ -71,10 +71,9 @@ export function SignSolanaMessage({ signMessage }: SignSolanaMessageProps) {
       <Button
         onClick={handleSignMessage}
         disabled={signPending}
-        isLoading={signPending}
         className="mb-4"
       >
-        Sign Message
+        {signPending ? "Signing..." : "Sign Message"}
       </Button>
       {signError && renderError(signError)}
       {signature && (

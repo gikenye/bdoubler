@@ -1,161 +1,241 @@
-/**
- * DESIGN SYSTEM - Retro RPG Theme
- * 
- * This file contains the centralized design system for the mini app with a retro RPG aesthetic.
- * Features:
- * - Earthy, muted color palette (browns, beiges, dark greens)
- * - Window frame-style borders with double lines
- * - Retro game-inspired styling
- */
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #2d2416;
-  --foreground: #e8dcc0;
-  --rpg-brown: #8b6f47;
-  --rpg-beige: #d4c5a9;
-  --rpg-dark-brown: #5c4a2e;
-  --rpg-darker-brown: #3d2f1f;
-  --rpg-green: #6b8e5a;
-  --rpg-dark-green: #4a5d3d;
-  --rpg-gold: #d4af37;
-  --rpg-shadow: rgba(0, 0, 0, 0.5);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    --background: #f5e6d3;
-    --foreground: #3d2f1f;
-    --rpg-brown: #8b6f47;
-    --rpg-beige: #d4c5a9;
-    --rpg-dark-brown: #5c4a2e;
-    --rpg-darker-brown: #3d2f1f;
-    --rpg-green: #6b8e5a;
-    --rpg-dark-green: #4a5d3d;
-    --rpg-gold: #b8941f;
-    --rpg-shadow: rgba(0, 0, 0, 0.3);
+@layer utilities {
+  .outline-ring {
+    outline-color: rgb(var(--ring));
   }
 }
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: 'Inter', 'Courier New', monospace, sans-serif;
-  background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 0, 0, 0.03) 2px, rgba(0, 0, 0, 0.03) 4px);
+:root {
+--font-size: 16px;
+--background: #1a1625;
+--foreground: #e8e6f0;
+--card: #252133;
+--card-foreground: #e8e6f0;
+--popover: #252133;
+--popover-foreground: #e8e6f0;
+--primary: #00d9ff;
+--primary-foreground: #1a1625;
+--secondary: #2d2838;
+--secondary-foreground: #e8e6f0;
+--muted: #2d2838;
+--muted-foreground: #9691a8;
+--accent: #00d9ff;
+--accent-foreground: #1a1625;
+--destructive: #ff4757;
+--destructive-foreground: #ffffff;
+--border: #3d3847;
+--input: transparent;
+--input-background: #1f1b2b;
+--switch-background: #2d2838;
+--font-weight-medium: 700;
+--font-weight-normal: 500;
+--ring: #00d9ff;
+--chart-1: #00d9ff;
+--chart-2: #ff6b9d;
+--chart-3: #ffd93d;
+--chart-4: #6bcf7f;
+--chart-5: #a78bfa;
+--radius: 1rem;
+--sidebar: #16131f;
+--sidebar-foreground: #e8e6f0;
+--sidebar-primary: #00d9ff;
+--sidebar-primary-foreground: #1a1625;
+--sidebar-accent: #252133;
+--sidebar-accent-foreground: #e8e6f0;
+--sidebar-border: #3d3847;
+--sidebar-ring: #00d9ff;
+
+/* Game UI colors - more subtle */
+--game-purple: #252133;
+--game-dark-purple: #1a1625;
+--game-border: #3d3847;
+--game-border-light: #4a4556;
+--neon-cyan: #00d9ff;
+--neon-pink: #ff6b9d;
+--neon-yellow: #ffd93d;
+--neon-green: #6bcf7f;
 }
 
-* {
-  scrollbar-width: none; /* Firefox */
-  -ms-overflow-style: none; /* IE and Edge */
-}
-
-*::-webkit-scrollbar {
-  display: none;
+.dark {
+--background: #1a1625;
+--foreground: #e8e6f0;
+--card: #252133;
+--card-foreground: #e8e6f0;
+--popover: #252133;
+--popover-foreground: #e8e6f0;
+--primary: #00d9ff;
+--primary-foreground: #1a1625;
+--secondary: #2d2838;
+--secondary-foreground: #e8e6f0;
+--muted: #2d2838;
+--muted-foreground: #9691a8;
+--accent: #00d9ff;
+--accent-foreground: #1a1625;
+--destructive: #ff4757;
+--destructive-foreground: #ffffff;
+--border: #3d3847;
+--input: #1f1b2b;
+--ring: 0 217 255;
+--font-weight-medium: 700;
+--font-weight-normal: 500;
+--chart-1: #00d9ff;
+--chart-2: #ff6b9d;
+--chart-3: #ffd93d;
+--chart-4: #6bcf7f;
+--chart-5: #a78bfa;
+--sidebar: #16131f;
+--sidebar-foreground: #e8e6f0;
+--sidebar-primary: #00d9ff;
+--sidebar-primary-foreground: #1a1625;
+--sidebar-accent: #252133;
+--sidebar-accent-foreground: #e8e6f0;
+--sidebar-border: #3d3847;
+--sidebar-ring: #00d9ff;
 }
 
 @layer base {
-  :root {
-    --radius: 0.5rem;
-  }
+* {
+@apply border-border outline-ring/50;
 }
 
-@layer components {
-  /* Global container styles for consistent layout */
-  .container {
-    @apply mx-auto max-w-md px-4;
-  }
-  
-  .container-wide {
-    @apply mx-auto max-w-lg px-4;
-  }
-  
-  .container-narrow {
-    @apply mx-auto max-w-sm px-4;
-  }
+body {
+@apply bg-background text-foreground;
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+}
+}
 
-  /* Retro RPG Window Frame */
-  .rpg-window {
-    @apply bg-[var(--rpg-darker-brown)] border-[3px] border-double border-[var(--rpg-brown)] shadow-[0_4px_8px_var(--rpg-shadow),inset_0_1px_0_rgba(255,255,255,0.1)] p-4;
-    background-image: 
-      linear-gradient(135deg, rgba(139, 111, 71, 0.1) 0%, transparent 50%),
-      linear-gradient(45deg, rgba(0, 0, 0, 0.1) 25%, transparent 25%);
-    background-size: 4px 4px;
-  }
+/**
+ * Base typography. This is not applied to elements which has an ancestor with a Tailwind text class.
+ */
+@layer base {
+:where(:not(:has([class*=' text-']), :not(:has([class^='text-'])))) {
+h1 {
+font-size: var(--text-2xl);
+font-weight: var(--font-weight-medium);
+line-height: 1.5;
+}
 
-  .rpg-window-inner {
-    @apply bg-[var(--rpg-dark-brown)] border-2 border-[var(--rpg-brown)] p-3;
-  }
+h2 {
+font-size: var(--text-xl);
+font-weight: var(--font-weight-medium);
+line-height: 1.5;
+}
 
-  /* Global card styles - Retro RPG theme */
-  .card {
-    @apply rpg-window;
-  }
-  
-  .card-primary {
-    @apply bg-[var(--rpg-dark-green)] border-[var(--rpg-green)];
-  }
+h3 {
+font-size: var(--text-lg);
+font-weight: var(--font-weight-medium);
+line-height: 1.5;
+}
 
-  /* Global button styles - Retro RPG theme */
-  .btn {
-    @apply inline-flex items-center justify-center px-4 py-2 text-sm font-medium transition-all focus:outline-none disabled:opacity-50 disabled:pointer-events-none;
-    @apply border-[3px] border-double border-[var(--rpg-brown)] shadow-[0_2px_4px_var(--rpg-shadow),inset_0_1px_0_rgba(255,255,255,0.1)];
-    @apply bg-[var(--rpg-dark-brown)] text-[var(--rpg-beige)];
-    @apply hover:bg-[var(--rpg-brown)] hover:shadow-[0_3px_6px_var(--rpg-shadow),inset_0_1px_0_rgba(255,255,255,0.15)];
-    @apply active:shadow-[inset_0_2px_4px_var(--rpg-shadow)] active:scale-[0.98];
-  }
-  
-  .btn-primary {
-    @apply bg-[var(--rpg-green)] border-[var(--rpg-dark-green)] text-[var(--rpg-beige)];
-    @apply hover:bg-[var(--rpg-dark-green)] hover:border-[var(--rpg-green)];
-  }
-  
-  .btn-secondary {
-    @apply bg-[var(--rpg-brown)] border-[var(--rpg-dark-brown)] text-[var(--rpg-beige)];
-    @apply hover:bg-[var(--rpg-dark-brown)] hover:border-[var(--rpg-brown)];
-  }
-  
-  .btn-outline {
-    @apply bg-transparent border-[var(--rpg-brown)] text-[var(--rpg-beige)];
-    @apply hover:bg-[var(--rpg-dark-brown)]/50;
-  }
+h4 {
+font-size: var(--text-base);
+font-weight: var(--font-weight-medium);
+line-height: 1.5;
+}
 
-  /* Global input styles - Retro RPG theme */
-  .input {
-    @apply block w-full px-3 py-2 text-[var(--foreground)] placeholder-[var(--rpg-beige)]/50;
-    @apply bg-[var(--rpg-dark-brown)] border-2 border-[var(--rpg-brown)];
-    @apply focus:border-[var(--rpg-green)] focus:outline-none focus:ring-2 focus:ring-[var(--rpg-green)]/20;
-    @apply shadow-[inset_0_2px_4px_var(--rpg-shadow)];
-  }
+p {
+font-size: var(--text-base);
+font-weight: var(--font-weight-normal);
+line-height: 1.5;
+}
 
-  /* Global loading spinner - Retro RPG theme */
-  .spinner {
-    @apply animate-spin rounded-full border-2 border-[var(--rpg-brown)] border-t-[var(--rpg-green)];
-  }
-  
-  .spinner-primary {
-    @apply animate-spin rounded-full border-2 border-[var(--rpg-beige)] border-t-[var(--rpg-green)];
-  }
+label {
+font-size: var(--text-base);
+font-weight: var(--font-weight-medium);
+line-height: 1.5;
+}
 
-  /* Global focus styles */
-  .focus-ring {
-    @apply focus:outline-none focus:ring-2 focus:ring-[var(--rpg-green)] focus:ring-offset-2 focus:ring-offset-[var(--rpg-darker-brown)];
-  }
+button {
+font-size: var(--text-base);
+font-weight: var(--font-weight-medium);
+line-height: 1.5;
+}
 
-  /* Retro RPG Text Styles */
-  .rpg-title {
-    @apply text-[var(--rpg-gold)] font-bold text-shadow-[0_2px_4px_var(--rpg-shadow)];
-    text-shadow: 0 2px 4px var(--rpg-shadow), 0 0 8px rgba(212, 175, 55, 0.3);
-  }
+input {
+font-size: var(--text-base);
+font-weight: var(--font-weight-normal);
+line-height: 1.5;
+}
+}
+}
 
-  .rpg-text {
-    @apply text-[var(--rpg-beige)];
-  }
+html {
+font-size: var(--font-size);
+}
 
-  .rpg-label {
-    @apply text-[var(--rpg-beige)] font-medium;
-  }
+/* Game UI styles */
+.game-card {
+border: 4px solid var(--color-game-border);
+border-radius: 1rem;
+box-shadow: 
+0 6px 0 0 rgba(0, 0, 0, 0.4),
+inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+position: relative;
+}
+
+.game-card:active {
+transform: translateY(2px);
+box-shadow: 
+0 4px 0 0 rgba(0, 0, 0, 0.4),
+inset 0 1px 0 0 rgba(255, 255, 255, 0.05);
+}
+
+.game-button {
+border: 4px solid;
+border-radius: 0.75rem;
+box-shadow: 
+0 6px 0 0 rgba(0, 0, 0, 0.4),
+inset 0 2px 0 0 rgba(255, 255, 255, 0.1);
+transition: all 0.1s;
+position: relative;
+}
+
+.game-button:active {
+transform: translateY(3px);
+box-shadow: 
+0 3px 0 0 rgba(0, 0, 0, 0.4),
+inset 0 2px 0 0 rgba(255, 255, 255, 0.1);
+}
+
+.game-progress {
+border: 4px solid var(--color-game-border);
+border-radius: 2rem;
+padding: 4px;
+background: rgba(0, 0, 0, 0.3);
+box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+.game-badge {
+border: 3px solid;
+box-shadow: 
+0 4px 0 0 rgba(0, 0, 0, 0.4),
+inset 0 1px 0 0 rgba(255, 255, 255, 0.15);
+}
+
+.stat-card {
+border: 4px solid;
+border-radius: 1rem;
+background: var(--color-game-purple);
+box-shadow: 
+0 6px 0 0 rgba(0, 0, 0, 0.4),
+inset 0 2px 0 0 rgba(255, 255, 255, 0.05);
+position: relative;
+overflow: hidden;
+}
+
+.stat-card::before {
+content: '';
+position: absolute;
+top: 0;
+left: 0;
+right: 0;
+height: 2px;
+background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+}
+
+.glow-effect {
+filter: drop-shadow(0 0 8px currentColor);
 }

@@ -4,9 +4,8 @@ import { useEffect } from "react";
 import { useMiniApp } from "@neynar/react";
 import { Header } from "~/components/ui/Header";
 import { Footer } from "~/components/ui/Footer";
-import { HomeTab, ActionsTab, ContextTab, WalletTab } from "~/components/ui/tabs";
+import { HomeTab, ActionsTab, ContextTab, WalletTab } from "~/components/ui/tabs/index";
 import { USE_WALLET } from "~/lib/constants";
-import { useNeynarUser } from "../hooks/useNeynarUser";
 
 // --- Types ---
 export enum Tab {
@@ -61,8 +60,6 @@ export default function App(
     currentTab,
   } = useMiniApp();
 
-  // --- Neynar user hook ---
-  const { user: neynarUser } = useNeynarUser(context || undefined);
 
   // --- Effects ---
   /**
@@ -101,7 +98,7 @@ export default function App(
       }}
     >
       {/* Header should be full width */}
-      <Header neynarUser={neynarUser} />
+      <Header />
 
       {/* Main content and footer should be centered */}
       <div className="container py-2 pb-20">

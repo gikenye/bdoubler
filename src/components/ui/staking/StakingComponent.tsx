@@ -5,7 +5,7 @@ import { useAccount, useSendTransaction, useWaitForTransactionReceipt } from "wa
 import { celo } from "wagmi/chains";
 import { useConnection as useSolanaConnection, useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
 import { PublicKey, SystemProgram, Transaction } from '@solana/web3.js';
-import { Button } from "../Button";
+import { Button } from "../button";
 import { Input } from "../input";
 import { Label } from "../label";
 import { truncateAddress } from "../../../lib/truncateAddress";
@@ -210,7 +210,6 @@ export function StakingComponent() {
           (selectedToken === "ETH" && (!isConnected || chainId !== celo.id)) ||
           (selectedToken === "SOL" && !publicKey)
         }
-        isLoading={isStaking}
       >
         Stake {stakeAmount || "0"} {selectedToken}
       </Button>

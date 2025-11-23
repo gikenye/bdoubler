@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useMiniApp } from "@neynar/react";
-import { Button } from "../Button";
+import { Button } from "../button";
 import { Input } from "../input";
 import { Label } from "../label";
 import { useNeynarUser } from "../../../hooks/useNeynarUser";
@@ -182,9 +182,8 @@ export function SessionMatchingComponent() {
         <Button
           onClick={handleCreateSession}
           disabled={!taskDescription || !duration || !startTime || isCreating}
-          isLoading={isCreating}
         >
-          Create Session
+          {isCreating ? "Creating..." : "Create Session"}
         </Button>
       </div>
 
@@ -201,10 +200,13 @@ export function SessionMatchingComponent() {
               <Button
                 onClick={() => handleJoinSession(session.id)}
                 disabled={session.participants.includes(context?.user?.fid || 0) || isJoining === session.id}
-                isLoading={isJoining === session.id}
                 className="mt-2"
               >
-                {session.participants.includes(context?.user?.fid || 0) ? "Joined" : "Join Session"}
+                {session.participants.includes(context?.user?.fid || 0)
+                  ? "Joined"
+                  : isJoining === session.id
+                  ? "Joining..."
+                  : "Join Session"}
               </Button>
             </div>
           ))}

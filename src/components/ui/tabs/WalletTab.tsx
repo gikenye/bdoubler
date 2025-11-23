@@ -4,7 +4,7 @@ import { useCallback, useMemo, useState, useEffect } from "react";
 import { useAccount, useSendTransaction, useSignTypedData, useWaitForTransactionReceipt, useDisconnect, useConnect, useSwitchChain, useChainId, type Connector } from "wagmi";
 import { useWallet as useSolanaWallet } from '@solana/wallet-adapter-react';
 import { base, degen, mainnet, optimism, unichain } from "wagmi/chains";
-import { Button } from "../Button";
+import { Button } from "../button";
 import { truncateAddress } from "../../../lib/truncateAddress";
 import { renderError } from "../../../lib/errorUtils";
 import { SignEvmMessage } from "../wallet/SignEvmMessage";
@@ -298,10 +298,9 @@ export function WalletTab() {
           <Button
             onClick={sendEvmContractTransaction}
             disabled={!isConnected || isEvmTransactionPending}
-            isLoading={isEvmTransactionPending}
             className="w-full"
           >
-            Send Transaction (contract)
+            {isEvmTransactionPending ? "Sending..." : "Send Transaction (contract)"}
           </Button>
           {isEvmTransactionError && renderError(evmTransactionError)}
           {evmContractTransactionHash && (
@@ -320,19 +319,17 @@ export function WalletTab() {
           <Button
             onClick={signTyped}
             disabled={!isConnected || isEvmSignTypedDataPending}
-            isLoading={isEvmSignTypedDataPending}
             className="w-full"
           >
-            Sign Typed Data
+            {isEvmSignTypedDataPending ? "Signing..." : "Sign Typed Data"}
           </Button>
           {isEvmSignTypedDataError && renderError(evmSignTypedDataError)}
           <Button
             onClick={handleSwitchChain}
             disabled={isChainSwitchPending}
-            isLoading={isChainSwitchPending}
             className="w-full"
           >
-            Switch to {nextChain.name}
+            {isChainSwitchPending ? "Switching..." : `Switch to ${nextChain.name}`}
           </Button>
           {isChainSwitchError && renderError(chainSwitchError)}
         </>

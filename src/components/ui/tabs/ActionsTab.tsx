@@ -131,7 +131,7 @@ export function ActionsTab() {
       {/* <ShareButton
         buttonText="Share Mini App"
         cast={{
-          text: 'Check out this awesome frame @1 @2 @3! 🚀🪐',
+          text: 'Check out this awesome frame @ @ @! 🚀🪐',
           bestFriends: true,
           embeds: [`${APP_URL}/share/${context?.user?.fid || ''}`],
         }}

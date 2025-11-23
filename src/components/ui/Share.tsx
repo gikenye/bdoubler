@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useState, useEffect } from 'react';
-import { Button } from './Button';
+import { Button } from './button';
 import { useMiniApp } from '@neynar/react';
 import { type ComposeCast } from "@farcaster/miniapp-sdk";
 import { APP_URL } from '~/lib/constants';
@@ -110,10 +110,9 @@ export function ShareButton({ buttonText, cast, className = '', isLoading = fals
     <Button
       onClick={handleShare}
       className={className}
-      isLoading={isLoading || isProcessing}
-      disabled={isLoadingBestFriends}
+      disabled={isLoading || isProcessing || isLoadingBestFriends}
     >
-      {buttonText}
+      {isLoading || isProcessing ? "Sharing..." : buttonText}
     </Button>
   );
 }

@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useMiniApp } from "@neynar/react";
-import { Button } from "../Button";
+import { Button } from "../button";
 import { sendMiniAppNotification } from "../../../lib/notifs";
 
 interface Session {
@@ -154,7 +154,7 @@ export function SharedTimerComponent({ session, onComplete, onPause }: SharedTim
         <Button
           onClick={handleStartPause}
           disabled={timeLeft === 0}
-          variant={isRunning ? "secondary" : "primary"}
+          variant={isRunning ? "secondary" : "default"}
         >
           {isRunning ? "Pause" : timeLeft === 0 ? "Completed" : "Start"}
         </Button>

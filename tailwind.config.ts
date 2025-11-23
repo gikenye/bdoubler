@@ -26,11 +26,11 @@ export default {
   			primary: "#6b8e5a", // Main brand color (dark green)
   			"primary-light": "#8ba87a", // For hover states
   			"primary-dark": "#4a5d3d", // For active states
-  			
+
   			// Secondary colors for backgrounds and text
   			secondary: "#d4c5a9", // Light backgrounds (beige)
   			"secondary-dark": "#5c4a2e", // Dark backgrounds (dark brown)
-  			
+
   			// Retro RPG specific colors
   			"rpg-brown": "#8b6f47",
   			"rpg-beige": "#d4c5a9",
@@ -39,10 +39,50 @@ export default {
   			"rpg-green": "#6b8e5a",
   			"rpg-dark-green": "#4a5d3d",
   			"rpg-gold": "#d4af37",
-  			
-  			// Legacy CSS variables for backward compatibility
+
+  			// CSS variables for shadcn/ui compatibility
+  			border: 'var(--border)',
+  			input: 'var(--input)',
+  			ring: 'rgb(var(--ring))',
   			background: 'var(--background)',
-  			foreground: 'var(--foreground)'
+  			foreground: 'var(--foreground)',
+  			'primary-foreground': 'var(--primary-foreground)',
+  			'secondary-foreground': 'var(--secondary-foreground)',
+  			muted: 'var(--muted)',
+  			'muted-foreground': 'var(--muted-foreground)',
+  			accent: 'var(--accent)',
+  			'accent-foreground': 'var(--accent-foreground)',
+  			destructive: 'var(--destructive)',
+  			'destructive-foreground': 'var(--destructive-foreground)',
+  			popover: 'var(--popover)',
+  			'popover-foreground': 'var(--popover-foreground)',
+  			card: 'var(--card)',
+  			'card-foreground': 'var(--card-foreground)',
+  			sidebar: 'var(--sidebar)',
+  			'sidebar-foreground': 'var(--sidebar-foreground)',
+  			'sidebar-primary': 'var(--sidebar-primary)',
+  			'sidebar-primary-foreground': 'var(--sidebar-primary-foreground)',
+  			'sidebar-accent': 'var(--sidebar-accent)',
+  			'sidebar-accent-foreground': 'var(--sidebar-accent-foreground)',
+  			'sidebar-border': 'var(--sidebar-border)',
+  			'sidebar-ring': 'var(--sidebar-ring)',
+  			'input-background': 'var(--input-background)',
+  			'switch-background': 'var(--switch-background)',
+  			chart: {
+  				1: 'var(--chart-1)',
+  				2: 'var(--chart-2)',
+  				3: 'var(--chart-3)',
+  				4: 'var(--chart-4)',
+  				5: 'var(--chart-5)',
+  			},
+  			'game-purple': 'var(--game-purple)',
+  			'game-dark-purple': 'var(--game-dark-purple)',
+  			'game-border': 'var(--game-border)',
+  			'game-border-light': 'var(--game-border-light)',
+  			'neon-cyan': 'var(--neon-cyan)',
+  			'neon-pink': 'var(--neon-pink)',
+  			'neon-yellow': 'var(--neon-yellow)',
+  			'neon-green': 'var(--neon-green)',
   		},
   		borderRadius: {
   			lg: 'var(--radius)',
