@@ -1,0 +1,30 @@
+{
+  "contractName": "FocusStaking",
+  "network": "celo-sepolia",
+  "contractAddress": "0xbF5fE6f5547Bbf7b88D8f4371c80A7784CeE12fa",
+  "implementationAddress": "0xE1C98A72de7BE69a2Eb50747Ae57A881F8e9a307",
+  "deploymentDate": "2025-11-23T03:54:20.000Z",
+  "deployer": "0xa23504669b5ff02dc7cad86019d762687ef25aa8",
+  "rpcUrl": "https://forno.celo-sepolia.celo-testnet.org",
+  "explorer": "https://celo-sepolia.blockscout.com/",
+  "keyFunctions": {
+    "createGroup": "0xe9a3b4f1",
+    "joinGroup": "0xeed02e4b", 
+    "startSession": "0x77127612",
+    "userPing": "0x0f946561",
+    "markAFK": "0xbc3b0601",
+    "finalizeGroup": "0x8bdb957f",
+    "withdraw": "0x2e1a7d4d",
+    "getGroupSummary": "0x921e7ca7",
+    "getParticipant": "0x1aed59f0",
+    "nextGroupId": "0x5eda7a76"
+  },
+  "testResults": {
+    "simulation": "successful",
+    "stakeAmount": "0.0001 CELO",
+    "gasPerTransaction": "~0.003-0.01 CELO",
+    "totalParticipants": 3,
+    "sessionDuration": "60 seconds",
+    "pingInterval": "10 seconds"
+  }
+}
