@@ -81,10 +81,10 @@ export default function App(
   // --- Early Returns ---
   if (!isSDKLoaded) {
     return (
-      <div className="flex items-center justify-center h-screen">
-        <div className="text-center">
+      <div className="flex items-center justify-center h-screen bg-[var(--background)]">
+        <div className="text-center rpg-window p-6">
           <div className="spinner h-8 w-8 mx-auto mb-4"></div>
-          <p>Loading SDK...</p>
+          <p className="rpg-text">Loading SDK...</p>
         </div>
       </div>
     );
@@ -106,7 +106,7 @@ export default function App(
       {/* Main content and footer should be centered */}
       <div className="container py-2 pb-20">
         {/* Main title */}
-        <h1 className="text-2xl font-bold text-center mb-4">{title}</h1>
+        <h1 className="rpg-title text-2xl font-bold text-center mb-4">{title}</h1>
 
         {/* Tab content rendering */}
         {currentTab === Tab.Home && <HomeTab />}

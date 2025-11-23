@@ -40,8 +40,8 @@ export function HomeTab() {
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Focus Session Dashboard</h1>
+    <div className="p-4 space-y-6">
+      <h1 className="rpg-title text-2xl font-bold mb-6 text-center">Focus Session Dashboard</h1>
       <div className="space-y-6">
         <SessionMatchingComponent />
         <RewardsDisplayComponent rewardData={mockRewardData} />

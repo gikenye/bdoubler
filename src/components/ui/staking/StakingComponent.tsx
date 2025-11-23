@@ -164,22 +164,22 @@ export function StakingComponent() {
   const transactionHash = selectedToken === "ETH" ? ethTransactionHash : solanaTransactionState.status === 'success' ? solanaTransactionState.signature : null;
 
   return (
-    <div className="space-y-4 p-4 border rounded-lg">
-      <h3 className="text-lg font-semibold">Stake for Focus Session</h3>
+    <div className="rpg-window space-y-4">
+      <h3 className="rpg-title text-lg font-semibold mb-4">Stake for Focus Session</h3>
 
       {/* Current Staked Amount */}
-      <div className="text-sm">
-        <Label>Current Staked: {currentStaked} {selectedToken}</Label>
+      <div className="rpg-window-inner p-3">
+        <Label className="rpg-label text-sm">Current Staked: <span className="rpg-title">{currentStaked} {selectedToken}</span></Label>
       </div>
 
       {/* Token Selection */}
       <div>
-        <Label htmlFor="token-select">Select Token</Label>
+        <Label htmlFor="token-select" className="rpg-label">Select Token</Label>
         <select
           id="token-select"
           value={selectedToken}
           onChange={(e) => setSelectedToken(e.target.value as "ETH" | "SOL")}
-          className="flex h-10 w-full rounded-md border border-neutral-200 bg-white px-3 py-2 text-base ring-offset-white file:border-0 file:bg-transparent file:text-sm file:font-medium file:text-neutral-950 placeholder:text-neutral-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-neutral-950 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 md:text-sm dark:border-neutral-800 dark:bg-neutral-950 dark:ring-offset-neutral-950 dark:file:text-neutral-50 dark:placeholder:text-neutral-400 dark:focus-visible:ring-neutral-300"
+          className="input"
         >
           <option value="ETH">ETH (Celo)</option>
           <option value="SOL">SOL</option>
@@ -217,7 +217,7 @@ export function StakingComponent() {
 
       {/* Transaction Status */}
       {isTransactionError && (
-        <div>
+        <div className="rpg-window-inner p-3">
           {selectedToken === "ETH"
             ? renderError(ethTransactionError)
             : solanaTransactionState.status === 'error' && renderError(solanaTransactionState.error)
@@ -226,10 +226,10 @@ export function StakingComponent() {
       )}
 
       {transactionHash && (
-        <div className="mt-2 text-xs">
-          <div>Transaction: {truncateAddress(transactionHash)}</div>
-          <div>
-            Status:{" "}
+        <div className="rpg-window-inner p-3 mt-2 text-xs space-y-1">
+          <div className="rpg-text"><span className="rpg-label">Transaction:</span> {truncateAddress(transactionHash)}</div>
+          <div className="rpg-text">
+            <span className="rpg-label">Status:</span>{" "}
             {selectedToken === "ETH"
               ? isEthTransactionConfirming
                 ? "Confirming..."

@@ -22,14 +22,23 @@ export default {
   theme: {
   	extend: {
   		colors: {
-  			// Main theme color - change this to update the entire app's color scheme
-  			primary: "#8b5cf6", // Main brand color
-  			"primary-light": "#a78bfa", // For hover states
-  			"primary-dark": "#7c3aed", // For active states
+  			// Retro RPG theme colors
+  			primary: "#6b8e5a", // Main brand color (dark green)
+  			"primary-light": "#8ba87a", // For hover states
+  			"primary-dark": "#4a5d3d", // For active states
   			
   			// Secondary colors for backgrounds and text
-  			secondary: "#f8fafc", // Light backgrounds
-  			"secondary-dark": "#334155", // Dark backgrounds
+  			secondary: "#d4c5a9", // Light backgrounds (beige)
+  			"secondary-dark": "#5c4a2e", // Dark backgrounds (dark brown)
+  			
+  			// Retro RPG specific colors
+  			"rpg-brown": "#8b6f47",
+  			"rpg-beige": "#d4c5a9",
+  			"rpg-dark-brown": "#5c4a2e",
+  			"rpg-darker-brown": "#3d2f1f",
+  			"rpg-green": "#6b8e5a",
+  			"rpg-dark-green": "#4a5d3d",
+  			"rpg-gold": "#d4af37",
   			
   			// Legacy CSS variables for backward compatibility
   			background: 'var(--background)',
